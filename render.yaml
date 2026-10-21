@@ -1,0 +1,59 @@
+services:
+  # ---------------------------------------------------------------------------
+  # 1. AICTE FDR Portal - FastAPI Backend Web Service
+  # ---------------------------------------------------------------------------
+  - type: web
+    name: aicte-fdr-backend
+    runtime: python
+    region: singapore
+    plan: free
+    rootDir: backend
+    buildCommand: "pip install --upgrade pip && pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: aicte-fdr-db
+          property: connectionString
+      - key: DEMO_MODE
+        value: "true"
+      - key: AWS_REGION
+        value: "ap-southeast-2"
+      - key: CORS_ORIGINS
+        value: "https://aicte-fdr-frontend.onrender.com"
+
+  # ---------------------------------------------------------------------------
+  # 2. AICTE FDR Portal - React Vite Frontend Static Site
+  # ---------------------------------------------------------------------------
+  - type: web
+    name: aicte-fdr-frontend
+    runtime: static
+    region: singapore
+    plan: free
+    rootDir: frontend
+    buildCommand: "npm install && npm run build"
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: aicte-fdr-backend
+          property: host
+
+databases:
+  # ---------------------------------------------------------------------------
+  # 3. AICTE FDR Portal - Render Managed PostgreSQL Database
+  # ---------------------------------------------------------------------------
+  - name: aicte-fdr-db
+    databaseName: aicte_fdr
+    user: aicte_user
+    region: singapore
+    plan: free
