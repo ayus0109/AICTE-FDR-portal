@@ -6,6 +6,10 @@ const getApiBase = () => {
     }
     return envUrl.endsWith('/api/v1') ? envUrl : `${envUrl.replace(/\/+$/, '')}/api/v1`;
   }
+  // Smart cloud fallback when hosted on Render static site
+  if (typeof window !== 'undefined' && window.location.hostname.includes('.onrender.com')) {
+    return 'https://aicte-fdr-backend.onrender.com/api/v1';
+  }
   return '/api/v1';
 };
 
