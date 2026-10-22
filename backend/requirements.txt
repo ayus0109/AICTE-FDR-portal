@@ -5,6 +5,7 @@ email-validator>=2.0.0
 pydantic-settings>=2.5.2
 sqlalchemy>=2.0.35
 alembic>=1.13.3
+psycopg[binary]>=3.2.0
 psycopg2-binary>=2.9.9
 python-multipart>=0.0.12
 python-jose[cryptography]>=3.3.0
