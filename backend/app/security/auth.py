@@ -1,9 +1,11 @@
+from __future__ import annotations
 import datetime
 from typing import Optional, List
 from fastapi import Depends, HTTPException, status, Query
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 import bcrypt
+from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.db.session import get_db
 from app.models.models import User, Institution
