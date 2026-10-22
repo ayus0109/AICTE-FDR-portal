@@ -41,6 +41,7 @@ export interface Document {
   id: number;
   fdr_id: number;
   storage_provider: string;
+  storage_key?: string;
   original_filename: string;
   file_type: string;
   file_size: number;

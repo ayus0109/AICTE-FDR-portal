@@ -71,6 +71,7 @@ async def upload_document(
         id=doc.id,
         fdr_id=doc.fdr_id,
         storage_provider=doc.storage_provider,
+        storage_key=doc.storage_key,
         original_filename=doc.original_filename,
         file_type=doc.file_type,
         file_size=doc.file_size,
@@ -84,7 +85,11 @@ def download_document(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    doc = db.query(Document).filter(Document.storage_key == storage_key).first()
+    doc = db.query(Document).filter(
+        (Document.storage_key == storage_key) | 
+        (Document.original_filename == storage_key) |
+        (Document.safe_filename == storage_key)
+    ).first()
     if not doc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Document metadata not found")
 
@@ -100,7 +105,7 @@ def download_document(
     if url and url.startswith("http"):
         return RedirectResponse(url=url)
 
-    file_bytes, content_type = storage.get_file_content(storage_key)
+    file_bytes, content_type = storage.get_file_content(doc.storage_key)
     return StreamingResponse(
         io.BytesIO(file_bytes),
         media_type=content_type,

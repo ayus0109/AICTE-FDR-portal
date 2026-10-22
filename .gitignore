@@ -32,6 +32,8 @@ backend/uploads/*
 .pytest_cache/
 .coverage
 htmlcov/
+*.zip
+!infrastructure/dummy_payload.zip
 
 # Terraform & IaC
 infrastructure/.terraform/

@@ -288,7 +288,7 @@ export const FDRDetailsPage: React.FC = () => {
                         <Eye className="h-4 w-4" />
                       </button>
                       <a
-                        href={getDownloadUrl(doc.original_filename, doc.download_url)}
+                        href={getDownloadUrl(doc.storage_key || doc.original_filename, doc.download_url)}
                         download
                         className="p-1.5 rounded-md hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition-colors"
                         title="Download Document"

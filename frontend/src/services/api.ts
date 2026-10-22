@@ -16,10 +16,12 @@ export const getDownloadUrl = (pathOrKey: string, directUrl?: string | null) => 
     return directUrl;
   }
   const cleanKey = pathOrKey.replace(/^\/+/, '');
+  const token = localStorage.getItem('aicte_token');
+  const tokenParam = token ? `?token=${encodeURIComponent(token)}` : '';
   if (cleanKey.startsWith('api/v1/')) {
-    return `${API_BASE.replace(/\/api\/v1\/?$/, '')}/${cleanKey}`;
+    return `${API_BASE.replace(/\/api\/v1\/?$/, '')}/${cleanKey}${tokenParam}`;
   }
-  return `${API_BASE}/documents/download/${cleanKey}`;
+  return `${API_BASE}/documents/download/${cleanKey}${tokenParam}`;
 };
 
 export class ApiError extends Error {
@@ -50,6 +52,18 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
   });
 
   if (response.status === 401) {
+    let errorDetail = 'Authentication failed.';
+    try {
+      const errJson = await response.json();
+      errorDetail = errJson.detail || errJson.message || errorDetail;
+    } catch {
+      // response is not json
+    }
+
+    if (endpoint.includes('/auth/')) {
+      throw new ApiError(errorDetail, 401);
+    }
+
     localStorage.removeItem('aicte_token');
     localStorage.removeItem('aicte_user');
     if (window.location.pathname !== '/login') {

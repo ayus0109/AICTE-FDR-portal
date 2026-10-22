@@ -35,6 +35,7 @@ def _enrich_fdr(fdr: FDRRecord, db: Session) -> FDRResponse:
             id=doc.id,
             fdr_id=doc.fdr_id,
             storage_provider=doc.storage_provider,
+            storage_key=doc.storage_key,
             original_filename=doc.original_filename,
             file_type=doc.file_type,
             file_size=doc.file_size,

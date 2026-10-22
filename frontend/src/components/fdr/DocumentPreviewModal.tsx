@@ -11,7 +11,7 @@ interface DocumentPreviewModalProps {
 export const DocumentPreviewModal: React.FC<DocumentPreviewModalProps> = ({ document, onClose }) => {
   if (!document) return null;
 
-  const downloadUrl = getDownloadUrl(document.original_filename, document.download_url);
+  const downloadUrl = getDownloadUrl(document.storage_key || document.original_filename, document.download_url);
   const isImage = document.file_type.startsWith('image/');
   const isPdf = document.file_type.includes('pdf');
 

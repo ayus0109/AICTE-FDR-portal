@@ -68,6 +68,7 @@ class DocumentResponse(BaseModel):
     id: int
     fdr_id: int
     storage_provider: str
+    storage_key: Optional[str] = None
     original_filename: str
     file_type: str
     file_size: int
