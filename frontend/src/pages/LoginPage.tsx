@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { UserRole } from '../types';
+import { API_BASE } from '../services/api';
 
 export const LoginPage: React.FC = () => {
   const { login, loginAsDemo } = useAuth();
@@ -31,7 +32,11 @@ export const LoginPage: React.FC = () => {
       await login(email, password);
       navigate('/');
     } catch (err: any) {
-      setError(err.message || 'Authentication failed. Please check credentials.');
+      if (err.message === 'Failed to fetch' || err.name === 'TypeError') {
+        setError(`Unable to connect to backend (${API_BASE}). If the server was sleeping, please wait 20-30 seconds for it to wake and click again.`);
+      } else {
+        setError(err.message || 'Authentication failed. Please check credentials.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -46,7 +51,11 @@ export const LoginPage: React.FC = () => {
       else if (role === 'AICTE_OFFICER') navigate('/officer/dashboard');
       else navigate('/admin/dashboard');
     } catch (err: any) {
-      setError(err.message || 'Demo login failed.');
+      if (err.message === 'Failed to fetch' || err.name === 'TypeError') {
+        setError(`Unable to connect to backend (${API_BASE}). If the server was sleeping, please wait 20-30 seconds for it to wake and click again.`);
+      } else {
+        setError(err.message || 'Demo login failed.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -222,6 +231,12 @@ export const LoginPage: React.FC = () => {
                   <div className="text-[10px] text-slate-500 line-clamp-1">Governance & Audit</div>
                   <div className="text-[10px] font-semibold text-purple-700 mt-1">1-Click Enter →</div>
                 </button>
+              </div>
+
+              <div className="pt-2 text-center">
+                <span className="text-[10px] text-slate-400">
+                  Target API: <code className="text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded text-[10px] font-mono">{API_BASE}</code>
+                </span>
               </div>
             </div>
           </div>
