@@ -40,8 +40,6 @@ services:
   - type: web
     name: aicte-fdr-frontend
     runtime: static
-    region: singapore
-    plan: free
     rootDir: frontend
     buildCommand: "npm install && npm run build"
     staticPublishPath: ./dist
