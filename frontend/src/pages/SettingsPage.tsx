@@ -12,7 +12,7 @@ import {
   AlertTriangle,
   Play
 } from 'lucide-react';
-import { api } from '../services/api';
+import { api, API_BASE } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 export const SettingsPage: React.FC = () => {
@@ -23,7 +23,8 @@ export const SettingsPage: React.FC = () => {
   const [resetMessage, setResetMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/api/health')
+    const healthUrl = `${API_BASE.replace(/\/api\/v1\/?$/, '')}/api/health`;
+    fetch(healthUrl)
       .then((r) => r.json())
       .then(setHealthData)
       .catch(console.error);

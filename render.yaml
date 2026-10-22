@@ -23,6 +23,14 @@ services:
         value: "true"
       - key: AWS_REGION
         value: "ap-southeast-2"
+      - key: USE_AWS_S3
+        value: "false"
+      - key: S3_BUCKET_NAME
+        value: "aicte-fdr-documents-ap-southeast-2"
+      - key: USE_AWS_SNS
+        value: "false"
+      - key: SNS_TOPIC_ARN
+        value: ""
       - key: CORS_ORIGINS
         value: "https://aicte-fdr-frontend.onrender.com"
 
